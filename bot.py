@@ -2,18 +2,26 @@ import discord
 from discord.ext import commands
 import os
 
+ROL_AGREGAR = 123456789
+ROL_QUITAR = 987654321
+
+TOKEN = os.getenv("TOKEN")
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-ROL_AGREGAR = 123456789
-ROL_QUITAR = 987654321
-
 class Panel(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
 
-    @discord.ui.button(label="Verificar", style=discord.ButtonStyle.green)
+    @discord.ui.button(
+        label="Verificar",
+        style=discord.ButtonStyle.green,
+        custom_id="verificar_panel"
+    )
     async def verificar(self, interaction: discord.Interaction, button: discord.ui.Button):
 
         rol_add = interaction.guild.get_role(ROL_AGREGAR)
@@ -22,21 +30,25 @@ class Panel(discord.ui.View):
         await interaction.user.add_roles(rol_add)
         await interaction.user.remove_roles(rol_remove)
 
-        await interaction.response.send_message("Roles actualizados ✅", ephemeral=True)
+        await interaction.response.send_message(
+            "Ahora estás verificado ✅",
+            ephemeral=True
+        )
 
 @bot.event
 async def on_ready():
+    bot.add_view(Panel())
     print(f"Bot conectado como {bot.user}")
 
 @bot.command()
 async def panel(ctx):
 
     embed = discord.Embed(
-        title="Verificación",
+        title="Panel de Verificación",
         description="Presiona el botón para verificarte",
-        color=0x00ff00
+        color=0x2ecc71
     )
 
     await ctx.send(embed=embed, view=Panel())
 
-bot.run(os.getenv("TOKEN"))
+bot.run(TOKEN)

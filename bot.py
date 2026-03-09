@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 import os
 
-ROL_AGREGAR = 123456789
-ROL_QUITAR = 987654321
+ROL_AGREGAR = 1469934965947891722
+ROL_QUITAR = 1469935217736290405
 
 TOKEN = os.getenv("TOKEN")
 
@@ -52,3 +52,4 @@ async def panel(ctx):
     await ctx.send(embed=embed, view=Panel())
 
 bot.run(TOKEN)
+
